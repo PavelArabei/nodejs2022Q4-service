@@ -4,5 +4,7 @@ export class User {
   password: string;
   version: number;
   createdAt: number;
-  updatedAt?: number;
+  updatedAt: number;
 }
+
+export type UserWithoutPassword = Omit<User, 'password'>;

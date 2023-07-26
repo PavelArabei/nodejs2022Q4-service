@@ -5,13 +5,14 @@ import {
   Get,
   HttpCode,
   Param,
-  Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IsUUIDDto } from '../dto/UUID.dto';
+import { User, UserWithoutPassword } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -19,27 +20,38 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    const user = this.userService.create(createUserDto);
+    return this.putAwayPassword(user);
   }
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    const allUsers = this.userService.findAll();
+    return allUsers.map((user) => this.putAwayPassword(user));
   }
 
   @Get(':id')
   findOne(@Param() { id }: IsUUIDDto) {
-    return this.userService.findOne(id);
+    const user = this.userService.findOne(id);
+    return this.putAwayPassword(user);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param() { id }: IsUUIDDto, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+    const newUser = this.userService.update(id, updateUserDto);
+    return this.putAwayPassword(newUser);
   }
 
   @Delete(':id')
   @HttpCode(204)
   remove(@Param() { id }: IsUUIDDto) {
     this.userService.remove(id);
+  }
+
+  private putAwayPassword(user: User): UserWithoutPassword {
+    const { password, ...fields }: User = user;
+    return {
+      ...fields,
+    };
   }
 }
