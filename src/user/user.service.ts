@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 } from 'uuid';
-import { DbService } from '../db/db/db.service';
+import { DbService } from '../db/db.service';
 import { User } from './entities/user.entity';
 import { ForbiddenException } from '../exceptions/forbiddenException';
 

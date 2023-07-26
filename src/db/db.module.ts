@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service';
-import { userDBService } from './user.db.service';
+import { TrackDBService } from './track.db.service';
+import { UserDBService } from './user.db.service';
 
 @Global()
 @Module({
@@ -11,7 +12,7 @@ export class DbModule {
   static forRoot(): any {
     return {
       module: DbModule,
-      providers: [DbService, userDBService],
+      providers: [DbService, UserDBService, TrackDBService],
       exports: [DbService],
     };
   }
