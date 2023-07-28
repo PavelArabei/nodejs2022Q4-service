@@ -2,7 +2,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { validate as uuidValidate } from 'uuid-validate';
+import * as uuidValidate from 'uuid-validate';
 
 @ValidatorConstraint({ name: 'isUuidOrNullable', async: false })
 export class IsUuidOrNullable implements ValidatorConstraintInterface {

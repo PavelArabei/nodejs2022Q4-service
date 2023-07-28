@@ -1,17 +1,16 @@
 import {
-  ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { validate as uuidValidate } from 'uuid-validate';
+import * as uuidValidate from 'uuid-validate';
 
 @ValidatorConstraint({ name: 'isUUID', async: false })
 export class IsUUIDValidator implements ValidatorConstraintInterface {
-  validate(value: string, _args: ValidationArguments) {
+  validate(value: string) {
     return uuidValidate(value, 4);
   }
 
-  defaultMessage(_args: ValidationArguments) {
+  defaultMessage() {
     return 'Invalid UUID format';
   }
 }

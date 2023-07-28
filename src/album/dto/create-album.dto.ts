@@ -7,22 +7,17 @@ import {
 } from 'class-validator';
 import { IsUuidOrNullable } from '../../validators/IsUuidOrNullable';
 
-export class CreateTrackDto {
+export class CreateAlbumDto {
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @IsNumber()
   @IsNotEmpty()
-  duration: number;
+  year: number;
 
   @IsNotEmpty()
   @IsOptional()
   @Validate(IsUuidOrNullable)
   artistId: string | null;
-
-  @IsNotEmpty()
-  @IsOptional()
-  @Validate(IsUuidOrNullable)
-  albumId: string | null;
 }

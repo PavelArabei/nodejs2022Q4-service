@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IsUUIDDto } from '../dto/UUID.dto';
 import { User, UserWithoutPassword } from './entities/user.entity';
+import { StatusCodes } from 'http-status-codes';
 
 @Controller('user')
 export class UserController {
@@ -43,7 +44,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(StatusCodes.NO_CONTENT)
   remove(@Param() { id }: IsUUIDDto) {
     this.userService.remove(id);
   }

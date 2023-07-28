@@ -9,8 +9,11 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 @Injectable()
 export class TrackService {
   constructor(private db: DbService) {}
-  create(createTrackDto: CreateTrackDto) {
+
+  create(createTrackDto: CreateTrackDto): Track {
+    console.log(2222);
     const track = this.newTrack(createTrackDto);
+    console.log(3333);
     return this.db.track.create(track);
   }
 
@@ -18,13 +21,13 @@ export class TrackService {
     return this.db.track.findAll();
   }
 
-  findOne(id: string) {
+  findOne(id: string): Track {
     const track = this.db.track.findOne(id);
     if (!track) throw new NotFoundException('Track not found');
     return track;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
+  update(id: string, updateTrackDto: UpdateTrackDto): Track {
     const track = this.db.track.findOne(id);
     if (!track) throw new NotFoundException('User not found');
 
@@ -32,11 +35,10 @@ export class TrackService {
     return this.db.track.update(newTrack);
   }
 
-  remove(id: string) {
+  remove(id: string): void {
     const track = this.db.track.findOne(id);
     if (!track) throw new NotFoundException('User not found');
-
-    return this.db.track.remove(id);
+    this.db.track.remove(id);
   }
 
   private newTrack(track: CreateTrackDto): Track {

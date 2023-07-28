@@ -1,12 +1,14 @@
 import { TrackDBService } from './track.db.service';
 import { Injectable } from '@nestjs/common';
 import { UserDBService } from './user.db.service';
+import { ArtistDbService } from './artist.db.service';
 
 @Injectable()
 export class DbService {
   constructor(
-    private userDBService: UserDBService,
-    private trackDBService: TrackDBService,
+    private readonly userDBService: UserDBService,
+    private readonly trackDBService: TrackDBService,
+    private readonly artistDbService: ArtistDbService,
   ) {}
 
   get user(): UserDBService {
@@ -14,5 +16,8 @@ export class DbService {
   }
   get track(): TrackDBService {
     return this.trackDBService;
+  }
+  get artist(): ArtistDbService {
+    return this.artistDbService;
   }
 }
