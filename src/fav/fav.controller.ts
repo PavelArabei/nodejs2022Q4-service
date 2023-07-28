@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { FavService } from './fav.service';
 import { IsUUIDDto } from '../dto/UUID.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('favs')
 @Controller('favs')
 export class FavController {
   constructor(private readonly favService: FavService) {}

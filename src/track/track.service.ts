@@ -29,7 +29,7 @@ export class TrackService {
 
   update(id: string, updateTrackDto: UpdateTrackDto): Track {
     const track = this.db.track.findOne(id);
-    if (!track) throw new NotFoundException('User not found');
+    if (!track) throw new NotFoundException('Track not found');
 
     const newTrack = this.updateTrack(track, updateTrackDto);
     return this.db.track.update(newTrack);
@@ -37,7 +37,7 @@ export class TrackService {
 
   remove(id: string): void {
     const track = this.db.track.findOne(id);
-    if (!track) throw new NotFoundException('User not found');
+    if (!track) throw new NotFoundException('Track not found');
     this.db.track.remove(id);
 
     const favTrack = this.db.fav.find(id, 'tracks');
