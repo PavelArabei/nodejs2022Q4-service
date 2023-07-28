@@ -4,6 +4,7 @@ import { TrackDBService } from './track.db.service';
 import { UserDBService } from './user.db.service';
 import { ArtistDbService } from './artist.db.service';
 import { AlbumDbService } from './album.db.service';
+import { FavDBService } from './fav.db.service';
 
 @Global()
 @Module({
@@ -20,6 +21,7 @@ export class DbModule {
         TrackDBService,
         ArtistDbService,
         AlbumDbService,
+        FavDBService,
       ],
       exports: [DbService],
     };

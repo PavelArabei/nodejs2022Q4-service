@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { UserDBService } from './user.db.service';
 import { ArtistDbService } from './artist.db.service';
 import { AlbumDbService } from './album.db.service';
+import { FavDBService } from './fav.db.service';
 
 @Injectable()
 export class DbService {
@@ -11,6 +12,7 @@ export class DbService {
     private readonly trackDBService: TrackDBService,
     private readonly artistDbService: ArtistDbService,
     private readonly albumDbService: AlbumDbService,
+    private readonly favDBService: FavDBService,
   ) {}
 
   get user(): UserDBService {
@@ -24,5 +26,8 @@ export class DbService {
   }
   get album(): AlbumDbService {
     return this.albumDbService;
+  }
+  get fav(): FavDBService {
+    return this.favDBService;
   }
 }

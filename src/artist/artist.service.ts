@@ -45,6 +45,9 @@ export class ArtistService {
         this.db[key].update(updatedEl);
       }
     }
+
+    const favArtist = this.db.fav.find(id, 'artists');
+    if (favArtist) this.db.fav.remove(id, 'artists');
   }
 
   private newArtist(artist: CreateArtistDto): Artist {
