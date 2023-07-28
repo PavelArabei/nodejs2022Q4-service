@@ -11,9 +11,11 @@ export class TrackDBService {
   public findOne(id: string): Track {
     return this.TRACKS.find((track) => track.id === id);
   }
-  public findByAuthorId(id: string): Track | undefined {
-    return this.TRACKS.find((track) => track.artistId === id);
+
+  public find(id: string, type: keyof Track): Track | undefined {
+    return this.TRACKS.find((track) => track[type] === id);
   }
+
   public create(track: Track): Track {
     this.TRACKS.push(track);
     return track;

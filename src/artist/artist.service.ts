@@ -5,7 +5,6 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
 import { DbService } from '../db/db.service';
-import { Track } from '../track/entities/track.entity';
 
 @Injectable()
 export class ArtistService {
@@ -39,10 +38,12 @@ export class ArtistService {
     if (!artist) throw new NotFoundException('Artist not found');
     this.db.artist.remove(id);
 
-    const track = this.db.track.findByAuthorId(id);
-    if (track) {
-      const updatedTrack: Track = { ...track, artistId: null };
-      this.db.track.update(updatedTrack);
+    for (const key of ['track', 'album']) {
+      const el = this.db[key].find(id, 'artistId');
+      if (el) {
+        const updatedEl = { ...el, artistId: null };
+        this.db[key].update(updatedEl);
+      }
     }
   }
 
