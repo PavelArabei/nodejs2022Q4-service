@@ -4,6 +4,10 @@ import * as dotenv from 'dotenv';
 import * as process from 'process';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { dump } from 'js-yaml';
+
+import { join, resolve } from 'path';
+import { writeFile } from 'fs/promises';
 
 async function bootstrap() {
   dotenv.config();
@@ -28,5 +32,13 @@ async function bootstrap() {
 
   console.log(`Server start on: ${appLink}`);
   console.log(`To open Doc click here: ${doc}`);
+
+  const pathToDocFile = join(resolve(), 'doc', 'api.yaml');
+  const docYaml = dump(document);
+  try {
+    await writeFile(pathToDocFile, docYaml);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 bootstrap();
