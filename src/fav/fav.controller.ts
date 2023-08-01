@@ -1,14 +1,6 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-} from '@nestjs/common';
-import { FavService } from './fav.service';
-import { IsUUIDDto } from '../dto/UUID.dto';
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
+import { FavService } from "./fav.service";
+import { IsUUIDDto } from "../dto/UUID.dto";
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -16,12 +8,12 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnprocessableEntityResponse,
-} from '@nestjs/swagger';
-import { Favs } from './entities/favs.entity';
-import { BadRequest } from '../dto/badRequest';
-import { UnprocessableDto } from '../dto/unprocessable.dto';
-import { NotFoundDto } from '../dto/notFound.dto';
+  ApiUnprocessableEntityResponse
+} from "@nestjs/swagger";
+import { Favs } from "./entities/favs.entity";
+import { BadRequest } from "../dto/badRequest";
+import { UnprocessableDto } from "../dto/unprocessable.dto";
+import { NotFoundDto } from "../dto/notFound.dto";
 
 @ApiTags('favs')
 @Controller('favs')

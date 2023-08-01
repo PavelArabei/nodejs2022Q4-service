@@ -1,19 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 
-import { v4 } from 'uuid';
-import { CreateTrackDto } from './dto/create-track.dto';
-import { DbService } from '../db/db.service';
-import { Track } from './entities/track.entity';
-import { UpdateTrackDto } from './dto/update-track.dto';
+import { v4 } from "uuid";
+import { CreateTrackDto } from "./dto/create-track.dto";
+import { DbService } from "../db/db.service";
+import { Track } from "./entities/track.entity";
+import { UpdateTrackDto } from "./dto/update-track.dto";
 
 @Injectable()
 export class TrackService {
   constructor(private db: DbService) {}
 
   create(createTrackDto: CreateTrackDto): Track {
-    console.log(2222);
     const track = this.newTrack(createTrackDto);
-    console.log(3333);
     return this.db.track.create(track);
   }
 

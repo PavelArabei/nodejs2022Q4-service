@@ -1,19 +1,10 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { IsUUIDDto } from '../dto/UUID.dto';
-import { User, UserWithoutPassword } from './entities/user.entity';
-import { StatusCodes } from 'http-status-codes';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from "@nestjs/common";
+import { UserService } from "./user.service";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { IsUUIDDto } from "../dto/UUID.dto";
+import { User, UserWithoutPassword } from "./entities/user.entity";
+import { StatusCodes } from "http-status-codes";
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -21,10 +12,10 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { NotFoundDto } from '../dto/notFound.dto';
-import { BadRequest } from '../dto/badRequest';
+  ApiTags
+} from "@nestjs/swagger";
+import { NotFoundDto } from "../dto/notFound.dto";
+import { BadRequest } from "../dto/badRequest";
 
 @ApiTags('user')
 @Controller('user')
@@ -36,7 +27,6 @@ export class UserController {
   @ApiCreatedResponse({ type: UserWithoutPassword })
   @ApiBody({ type: User })
   create(@Body() createUserDto: CreateUserDto) {
-    console.log(+new Date());
     const user = this.userService.create(createUserDto);
     return this.putAwayPassword(user);
   }
