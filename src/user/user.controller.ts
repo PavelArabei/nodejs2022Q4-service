@@ -17,63 +17,54 @@ import {
 import { NotFoundDto } from "../dto/notFound.dto";
 import { BadRequest } from "../dto/badRequest";
 
-@ApiTags('user')
-@Controller('user')
+@ApiTags("user")
+@Controller("user")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {
+  }
 
   @Post()
   @ApiBadRequestResponse({ type: BadRequest })
   @ApiCreatedResponse({ type: UserWithoutPassword })
   @ApiBody({ type: User })
-  create(@Body() createUserDto: CreateUserDto) {
-    const user = this.userService.create(createUserDto);
-    return this.putAwayPassword(user);
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
+    return await this.userService.create(createUserDto);
   }
 
   @Get()
   @ApiOkResponse({
     type: [UserWithoutPassword],
-    description: 'get all users',
+    description: "get all users"
   })
-  findAll() {
-    const allUsers = this.userService.findAll();
-    return allUsers.map((user) => this.putAwayPassword(user));
+  async findAll(): Promise<UserWithoutPassword[]> {
+    return await this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOkResponse({
     type: UserWithoutPassword,
-    description: 'get current users',
+    description: "get current users"
   })
   @ApiNotFoundResponse({ type: NotFoundDto })
-  findOne(@Param() { id }: IsUUIDDto) {
-    const user = this.userService.findOne(id);
-    return this.putAwayPassword(user);
+  async findOne(@Param() { id }: IsUUIDDto): Promise<UserWithoutPassword> {
+    return await this.userService.findOne(id);
   }
 
-  @Put(':id')
+  @Put(":id")
   @ApiBadRequestResponse({ type: BadRequest })
-  @ApiOkResponse({ type: UserWithoutPassword, description: 'update user' })
+  @ApiOkResponse({ type: UserWithoutPassword, description: "update user" })
   @ApiNotFoundResponse({ type: NotFoundDto })
   @ApiBody({ type: UpdateUserDto })
-  update(@Param() { id }: IsUUIDDto, @Body() updateUserDto: UpdateUserDto) {
-    const newUser = this.userService.update(id, updateUserDto);
-    return this.putAwayPassword(newUser);
+  async update(@Param() { id }: IsUUIDDto, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiNoContentResponse()
   @ApiNotFoundResponse({ type: NotFoundDto })
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param() { id }: IsUUIDDto) {
-    this.userService.remove(id);
+  async remove(@Param() { id }: IsUUIDDto): Promise<void> {
+    await this.userService.remove(id);
   }
 
-  private putAwayPassword(user: User): UserWithoutPassword {
-    const { password, ...fields }: User = user;
-    return {
-      ...fields,
-    };
-  }
 }

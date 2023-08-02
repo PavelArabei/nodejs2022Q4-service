@@ -1,14 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 //export type UserWithoutPassword = Omit<User, 'password'>;
 export class UserWithoutPassword {
-  @ApiProperty({ example: '69db9eb3-4000-4eab-85c1-da409c656e88' })
+  @ApiProperty({ example: "69db9eb3-4000-4eab-85c1-da409c656e88" })
   @IsString()
   @IsNotEmpty()
   id: string;
 
-  @ApiProperty({ example: 'Awesome name' })
+  @ApiProperty({ example: "Awesome name" })
   @IsString()
   @IsNotEmpty()
   login: string;
@@ -28,8 +28,9 @@ export class UserWithoutPassword {
   @IsNotEmpty()
   updatedAt: number;
 }
+
 export class User extends UserWithoutPassword {
-  @ApiProperty({ example: 'Very strong password' })
+  @ApiProperty({ example: "Very strong password" })
   @IsString()
   @IsNotEmpty()
   password: string;

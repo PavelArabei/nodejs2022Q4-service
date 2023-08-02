@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    environment:
+      PORT: 4000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 7788
+      POSTGRES_DB: aaa
+    ports:
+      - 4000:4000
+      - 9229:9229
+    depends_on:
+      - db
+    networks:
+      - my_network
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      PORT: 4000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 7788
+      POSTGRES_DB: aaa
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  pgdata:

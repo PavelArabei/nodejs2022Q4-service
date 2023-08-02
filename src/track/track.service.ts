@@ -8,52 +8,51 @@ import { UpdateTrackDto } from "./dto/update-track.dto";
 
 @Injectable()
 export class TrackService {
-  constructor(private db: DbService) {}
+  constructor(private db: DbService) {
+  }
 
-  create(createTrackDto: CreateTrackDto): Track {
+  async create(createTrackDto: CreateTrackDto): Promise<Track> {
     const track = this.newTrack(createTrackDto);
     return this.db.track.create(track);
   }
 
-  findAll(): Track[] {
+  async findAll(): Promise<Track[]> {
     return this.db.track.findAll();
   }
 
-  findOne(id: string): Track {
+  async findOne(id: string): Promise<Track> {
     const track = this.db.track.findOne(id);
-    if (!track) throw new NotFoundException('Track not found');
+    if (!track) throw new NotFoundException("Track not found");
     return track;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto): Track {
-    const track = this.db.track.findOne(id);
-    if (!track) throw new NotFoundException('Track not found');
+  async update(id: string, updateTrackDto: UpdateTrackDto): Promise<Track> {
+    const track = await this.findOne(id);
 
     const newTrack = this.updateTrack(track, updateTrackDto);
     return this.db.track.update(newTrack);
   }
 
-  remove(id: string): void {
-    const track = this.db.track.findOne(id);
-    if (!track) throw new NotFoundException('Track not found');
+  async remove(id: string): Promise<void> {
+    await this.findOne(id);
     this.db.track.remove(id);
 
-    const favTrack = this.db.fav.find(id, 'tracks');
-    if (favTrack) this.db.fav.remove(id, 'tracks');
+    const favTrack = this.db.fav.find(id, "tracks");
+    if (favTrack) this.db.fav.remove(id, "tracks");
   }
 
   private newTrack(track: CreateTrackDto): Track {
     const id = v4();
     return {
       id,
-      ...track,
+      ...track
     };
   }
 
   private updateTrack(track: Track, updateTrackDto: UpdateTrackDto): Track {
     return {
       ...track,
-      ...updateTrackDto,
+      ...updateTrackDto
     };
   }
 }
