@@ -8,7 +8,8 @@ import { v4 } from "uuid";
 
 @Injectable()
 export class AlbumService {
-  constructor(private db: DbService) {}
+  constructor(private db: DbService) {
+  }
 
   async create(createAlbumDto: CreateAlbumDto) {
     const album: Album = this.newAlbum(createAlbumDto);
@@ -21,43 +22,43 @@ export class AlbumService {
 
   async findOne(id: string): Promise<Album> {
     const album = this.db.album.findOne(id);
-    if (!album) throw new NotFoundException('Album not found');
+    if (!album) throw new NotFoundException("Album not found");
     return album;
   }
 
-  async update(id: string, updateAlbumDto: UpdateAlbumDto):Promise<Album>  {
-    const album = await this.findOne(id)
+  async update(id: string, updateAlbumDto: UpdateAlbumDto): Promise<Album> {
+    const album = await this.findOne(id);
 
     const newAlbum = this.updateAlbum(album, updateAlbumDto);
     return this.db.album.update(newAlbum);
   }
- 
+
   async remove(id: string): Promise<void> {
     await this.findOne(id);
     this.db.album.remove(id);
 
-    const track = this.db.track.find(id, 'albumId');
+    const track = await this.db.track.find(id, "albumId");
     if (track) {
       const updatedTrack: Track = { ...track, albumId: null };
-      this.db.track.update(updatedTrack);
+      await this.db.track.update(updatedTrack);
     }
 
-    const favAlbum = this.db.fav.find(id, 'albums');
-    if (favAlbum) this.db.fav.remove(id, 'albums');
+    const favAlbum = await this.db.fav.find(id, "albums");
+    if (favAlbum) await this.db.fav.remove(id, "albums");
   }
 
   private newAlbum(album: CreateAlbumDto): Album {
     const id = v4();
     return {
       id,
-      ...album,
+      ...album
     };
   }
 
   private updateAlbum(album: Album, updateAlbumDto: UpdateAlbumDto): Album {
     return {
       ...album,
-      ...updateAlbumDto,
+      ...updateAlbumDto
     };
   }
 }

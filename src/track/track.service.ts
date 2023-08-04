@@ -17,11 +17,11 @@ export class TrackService {
   }
 
   async findAll(): Promise<Track[]> {
-    return this.db.track.findAll();
+    return await this.db.track.findAll();
   }
 
   async findOne(id: string): Promise<Track> {
-    const track = this.db.track.findOne(id);
+    const track = await this.db.track.findOne(id);
     if (!track) throw new NotFoundException("Track not found");
     return track;
   }
@@ -30,20 +30,22 @@ export class TrackService {
     const track = await this.findOne(id);
 
     const newTrack = this.updateTrack(track, updateTrackDto);
-    return this.db.track.update(newTrack);
+    return await this.db.track.update(newTrack);
   }
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
-    this.db.track.remove(id);
+    await this.db.track.remove(id);
 
-    const favTrack = this.db.fav.find(id, "tracks");
-    if (favTrack) this.db.fav.remove(id, "tracks");
+    const favTrack = await this.db.fav.find(id, "tracks");
+    if (favTrack) await this.db.fav.remove(id, "tracks");
   }
 
   private newTrack(track: CreateTrackDto): Track {
     const id = v4();
     return {
+      artistId: null,
+      albumId: null,
       id,
       ...track
     };

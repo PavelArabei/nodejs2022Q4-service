@@ -12,7 +12,6 @@ export class UserDBService {
     private readonly userRepository: Repository<User>) {
   }
 
-  
   public async findAll(): Promise<User[]> {
     return await this.userRepository.find();
   }

@@ -15,54 +15,54 @@ export class FavService {
   }
 
   async findAll() {
-    return this.db.fav.findAll();
+    return await this.db.fav.findAll();
   }
 
   async addTrackToFavorites(id: string) {
-    const track: Track = this.db.track.findOne(id);
+    const track: Track = await this.db.track.findOne(id);
     if (!track) throw new UnprocessableEntity("Track not found");
 
-    this.db.fav.addTrackToFavorites(track);
+    await this.db.fav.addTrackToFavorites(track);
     return createdMessage("Track");
   }
 
   async removeTrackFromFavorites(id: string) {
-    const track = this.db.fav.find(id, "tracks");
+    const track = await this.db.fav.find(id, "tracks");
     if (!track) throw new UnprocessableEntity("Track not found");
 
-    this.db.fav.remove(id, "tracks");
+    await this.db.fav.remove(id, "tracks");
     return deletedMessage("Track");
   }
 
   async addArtistToFavorites(id: string) {
-    const artist: Artist = this.db.artist.findOne(id);
+    const artist: Artist = await this.db.artist.findOne(id);
     if (!artist) throw new UnprocessableEntity("Artist not found");
 
-    this.db.fav.addArtistToFavorites(artist);
+    await this.db.fav.addArtistToFavorites(artist);
     return createdMessage("Artist");
   }
 
   async removeArtistFromFavorites(id: string) {
-    const artist = this.db.fav.find(id, "artists");
+    const artist = await this.db.fav.find(id, "artists");
     if (!artist) throw new UnprocessableEntity("Artist not found");
 
-    this.db.fav.remove(id, "artists");
+    await this.db.fav.remove(id, "artists");
     return deletedMessage("Artist");
   }
 
   async addAlbumToFavorites(id: string) {
-    const album: Album = this.db.album.findOne(id);
+    const album: Album = await this.db.album.findOne(id);
     if (!album) throw new UnprocessableEntity("Artist not found");
 
-    this.db.fav.addAlbumToFavorites(album);
+    await this.db.fav.addAlbumToFavorites(album);
     return createdMessage("Album");
   }
 
   async removeAlbumFromFavorites(id: string) {
-    const album = this.db.fav.find(id, "albums");
+    const album = await this.db.fav.find(id, "albums");
     if (!album) throw new UnprocessableEntity("Album not found");
 
-    this.db.fav.remove(id, "albums");
+    await this.db.fav.remove(id, "albums");
     return deletedMessage("Album");
   }
 }
