@@ -25,7 +25,7 @@ export class UserDBService {
   }
 
   public async update(user: User): Promise<User> {
-    return await this.userRepository.save(user);
+    return await this.create(user);
   }
 
   public async remove(id: string): Promise<void> {

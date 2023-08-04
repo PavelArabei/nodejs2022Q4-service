@@ -13,15 +13,15 @@ export class ArtistService {
 
   async create(createArtistDto: CreateArtistDto): Promise<Artist> {
     const artist: Artist = this.newArtist(createArtistDto);
-    return this.db.artist.create(artist);
+    return await this.db.artist.create(artist);
   }
 
   async findAll(): Promise<Artist[]> {
-    return this.db.artist.findAll();
+    return await this.db.artist.findAll();
   }
 
   async findOne(id: string): Promise<Artist> {
-    const artist = this.db.artist.findOne(id);
+    const artist = await this.db.artist.findOne(id);
     if (!artist) throw new NotFoundException("Artist not found");
     return artist;
   }
@@ -31,12 +31,12 @@ export class ArtistService {
     if (!artist) throw new NotFoundException("Artist not found");
 
     const newArtist = this.updateArtist(artist, updateArtistDto);
-    return this.db.artist.update(newArtist);
+    return await this.db.artist.update(newArtist);
   }
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
-    this.db.artist.remove(id);
+    await this.db.artist.remove(id);
 
     for (const key of ["track", "album"]) {
       const el = await this.db[key].find(id, "artistId");
