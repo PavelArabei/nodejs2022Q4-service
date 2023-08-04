@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Track } from "../track/entities/track.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 
 @Injectable()
 export class TrackDBService {
@@ -30,10 +30,10 @@ export class TrackDBService {
   }
 
   public async update(track: Track): Promise<Track> {
-    return await this.trackRepository.save(track);
+    return await this.create(track);
   }
 
-  public async remove(id: string): Promise<void> {
-    await this.trackRepository.delete(id);
+  public async remove(id: string): Promise<DeleteResult> {
+    return await this.trackRepository.delete(id);
   }
 }

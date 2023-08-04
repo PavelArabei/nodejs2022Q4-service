@@ -13,15 +13,15 @@ export class AlbumService {
 
   async create(createAlbumDto: CreateAlbumDto) {
     const album: Album = this.newAlbum(createAlbumDto);
-    return this.db.album.create(album);
+    return await this.db.album.create(album);
   }
 
   async findAll(): Promise<Album[]> {
-    return this.db.album.findAll();
+    return await this.db.album.findAll();
   }
 
   async findOne(id: string): Promise<Album> {
-    const album = this.db.album.findOne(id);
+    const album = await this.db.album.findOne(id);
     if (!album) throw new NotFoundException("Album not found");
     return album;
   }
@@ -30,12 +30,12 @@ export class AlbumService {
     const album = await this.findOne(id);
 
     const newAlbum = this.updateAlbum(album, updateAlbumDto);
-    return this.db.album.update(newAlbum);
+    return await this.db.album.update(newAlbum);
   }
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
-    this.db.album.remove(id);
+    await this.db.album.remove(id);
 
     const track = await this.db.track.find(id, "albumId");
     if (track) {
