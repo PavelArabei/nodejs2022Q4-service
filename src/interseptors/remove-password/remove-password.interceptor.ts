@@ -1,13 +1,19 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { map, Observable } from "rxjs";
+import { User } from "../../user/entities/user.entity";
+
+
+const changeUserDateType = (user: User): User => {
+  return { ...user, createdAt: +user.createdAt, updatedAt: +user.updatedAt };
+};
+const isUser = (user) => user && typeof user === "object" && "password" in user;
 
 @Injectable()
 export class RemovePasswordInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const isUser = (user) => user && typeof user === "object" && "password" in user;
     const removePassword = (user) => {
       if (isUser(user)) {
-        const newUser = { ...user };
+        const newUser: User = changeUserDateType(user);
         delete newUser.password;
         return newUser;
       }

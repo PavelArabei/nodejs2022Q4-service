@@ -23,13 +23,13 @@ export class UserWithoutPassword {
   @IsNotEmpty()
   version: number;
 
-  @Column()
+  @Column({ type: "bigint" })
   @ApiProperty({ example: 1690575786106 })
   @IsNumber()
   @IsNotEmpty()
   createdAt: number;
 
-  @Column()
+  @Column({ type: "bigint" })
   @ApiProperty({ example: 1690575786106 })
   @IsNumber()
   @IsNotEmpty()

@@ -17,11 +17,11 @@ export class UserService {
   }
 
   async findAll() {
-    return this.db.user.findAll();
+    return await this.db.user.findAll();
   }
 
   async findOne(id: string) {
-    const user = this.db.user.findOne(id);
+    const user = await this.db.user.findOne(id);
     if (!user) throw new NotFoundException("User not found");
     return user;
   }
@@ -39,7 +39,7 @@ export class UserService {
 
   async remove(id: string) {
     await this.findOne(id);
-    return this.db.user.remove(id);
+    return await this.db.user.remove(id);
   }
 
   private newUser({ login, password }: CreateUserDto): User {
