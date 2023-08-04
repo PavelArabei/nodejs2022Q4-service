@@ -8,10 +8,9 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: 7788
-      POSTGRES_DB: aaa
+      POSTGRES_DB: homelibrary
     ports:
       - 4000:4000
-      - 9229:9229
     depends_on:
       - db
     networks:
@@ -23,19 +22,19 @@ services:
       - "5432:5432"
     environment:
       PORT: 4000
-      POSTGRES_HOST: postgres
+      #      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: 7788
-      POSTGRES_DB: aaa
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      POSTGRES_DB: homelibrary
+    #    volumes:
+    #      - pgdata:/var/lib/postgresql/data
     networks:
       - my_network
 
 networks:
   my_network:
-    driver: bridge
+#    driver: bridge
 
-volumes:
-  pgdata:
+#volumes:
+#  pgdata:
