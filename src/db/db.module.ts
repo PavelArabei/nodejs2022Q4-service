@@ -9,8 +9,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "../user/entities/user.entity";
 import { Artist } from "../artist/entities/artist.entity";
 import { Album } from "../album/entities/album.entity";
-import { Favs } from "../fav/entities/favs.entity";
 import { Track } from "../track/entities/track.entity";
+import { FavArtistEntity } from "../fav/entities/favArtist.entity";
+import { FavTrackEntity } from "../fav/entities/favTrack.entity";
+import { FavAlbumEntity } from "../fav/entities/favAlbum.entity";
 
 @Global()
 @Module({
@@ -21,7 +23,7 @@ export class DbModule {
   static forRoot(): any {
     return {
       module: DbModule,
-      imports: [TypeOrmModule.forFeature([User, Track, Artist, Album, Favs])
+      imports: [TypeOrmModule.forFeature([User, Track, Artist, Album, FavArtistEntity, FavTrackEntity, FavAlbumEntity])
       ],
       providers: [
         DbService,

@@ -46,8 +46,8 @@ export class ArtistService {
       }
     }
 
-    const favArtist = await this.db.fav.find(id, "artists");
-    if (favArtist) await this.db.fav.remove(id, "artists");
+    // const favArtist = await this.db.fav.find(id, "artists");
+    // if (favArtist) await this.db.fav.remove(id, "artists");
   }
 
   private newArtist(artist: CreateArtistDto): Artist {

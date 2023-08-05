@@ -23,4 +23,6 @@ export class Album {
     nullable: true
   })
   artistId: string | null;
+
+
 }

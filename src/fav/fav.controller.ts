@@ -26,7 +26,7 @@ export class FavController {
     type: Favs,
     description: "get favs"
   })
-  async findAll(): Promise<Favs> {
+  async findAll() {
     return await this.favService.findAll();
   }
 

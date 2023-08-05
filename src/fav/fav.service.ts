@@ -4,6 +4,7 @@ import { Track } from "../track/entities/track.entity";
 import { UnprocessableEntity } from "../exceptions/unprocessableEntity";
 import { Artist } from "../artist/entities/artist.entity";
 import { Album } from "../album/entities/album.entity";
+import { Favs } from "./entities/favs.entity";
 
 const createdMessage = (name: string) => `${name} has been added to favorites`;
 const deletedMessage = (name: string) =>
@@ -21,15 +22,12 @@ export class FavService {
   async addTrackToFavorites(id: string) {
     const track: Track = await this.db.track.findOne(id);
     if (!track) throw new UnprocessableEntity("Track not found");
-
     await this.db.fav.addTrackToFavorites(track);
     return createdMessage("Track");
   }
 
   async removeTrackFromFavorites(id: string) {
-    const track = await this.db.fav.find(id, "tracks");
-    if (!track) throw new UnprocessableEntity("Track not found");
-
+    await this.getOne(id, "tracks");
     await this.db.fav.remove(id, "tracks");
     return deletedMessage("Track");
   }
@@ -43,9 +41,7 @@ export class FavService {
   }
 
   async removeArtistFromFavorites(id: string) {
-    const artist = await this.db.fav.find(id, "artists");
-    if (!artist) throw new UnprocessableEntity("Artist not found");
-
+    await this.getOne(id, "artists");
     await this.db.fav.remove(id, "artists");
     return deletedMessage("Artist");
   }
@@ -59,10 +55,13 @@ export class FavService {
   }
 
   async removeAlbumFromFavorites(id: string) {
-    const album = await this.db.fav.find(id, "albums");
-    if (!album) throw new UnprocessableEntity("Album not found");
-
+    await this.getOne(id, "albums");
     await this.db.fav.remove(id, "albums");
     return deletedMessage("Album");
+  }
+
+  async getOne(id: string, type: keyof Favs) {
+    const essence = await this.db.fav.find(id, type);
+    if (!essence) throw new UnprocessableEntity(`${type.toUpperCase()} not found`);
   }
 }

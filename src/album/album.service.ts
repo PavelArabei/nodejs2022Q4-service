@@ -43,8 +43,8 @@ export class AlbumService {
       await this.db.track.update(updatedTrack);
     }
 
-    const favAlbum = await this.db.fav.find(id, "albums");
-    if (favAlbum) await this.db.fav.remove(id, "albums");
+    // const favAlbum = await this.db.fav.find(id, "albums");
+    // if (favAlbum) await this.db.fav.remove(id, "albums");
   }
 
   private newAlbum(album: CreateAlbumDto): Album {

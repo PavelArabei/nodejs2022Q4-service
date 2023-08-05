@@ -37,8 +37,8 @@ export class TrackService {
     await this.findOne(id);
     await this.db.track.remove(id);
 
-    const favTrack = await this.db.fav.find(id, "tracks");
-    if (favTrack) await this.db.fav.remove(id, "tracks");
+    // const favTrack = await this.db.fav.find(id, "tracks");
+    // if (favTrack) await this.db.fav.remove(id, "tracks");
   }
 
   private newTrack(track: CreateTrackDto): Track {

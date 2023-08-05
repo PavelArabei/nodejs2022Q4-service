@@ -1,10 +1,12 @@
 version: '3.8'
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       PORT: 4000
-      POSTGRES_HOST: db
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: 7788
@@ -12,17 +14,20 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      - db
+      - postgres
     networks:
       - my_network
+    restart: always
 
-  db:
-    image: postgres:15-alpine
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
     ports:
       - "5432:5432"
     environment:
       #      PORT: 4000
-      #      POSTGRES_HOST: db
+      #      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: 7788
@@ -31,6 +36,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - my_network
+    restart: always
 
 networks:
   my_network:

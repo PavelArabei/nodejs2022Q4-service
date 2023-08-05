@@ -18,4 +18,5 @@ export class Artist {
   @ApiProperty({ example: false })
   @IsNotEmpty()
   grammy: boolean;
+
 }

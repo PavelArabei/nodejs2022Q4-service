@@ -28,4 +28,5 @@ export class Track {
   @Column()
   @ApiProperty({ example: 100 })
   duration: number;
+
 }
