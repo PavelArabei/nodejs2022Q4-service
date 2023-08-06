@@ -10,4 +10,5 @@ COPY . .
 
 ENV PORT 4000
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:combined"]
+#CMD ["sh", "-c", "sleep 10 && npm run db:migrate && npm run start:dev"]

@@ -22,9 +22,11 @@ export class FavDBService {
   }
 
   async findAll() {
-    const artist = await this.favArtist.find({ relations: ["artist"] });
-    const album = await this.favAlbum.find({ relations: ["album"] });
-    const track = await this.favTrack.find({ relations: ["track"] });
+    const [artist, album, track] = await Promise.all([
+      this.favArtist.find({ relations: ["artist"] }),
+      this.favAlbum.find({ relations: ["album"] }),
+      this.favTrack.find({ relations: ["track"] })
+    ]);
     const [artists, albums, tracks] = [artist, album, track].map(el => this.clearId(el));
     return { artists, tracks, albums };
   }

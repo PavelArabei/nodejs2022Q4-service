@@ -2,10 +2,8 @@ import { Track } from "../../track/entities/track.entity";
 import { Artist } from "../../artist/entities/artist.entity";
 import { Album } from "../../album/entities/album.entity";
 import { ApiProperty } from "@nestjs/swagger";
-import { PrimaryGeneratedColumn } from "typeorm";
 
 export class Favs {
-  @PrimaryGeneratedColumn()
   id: string;
 
 
