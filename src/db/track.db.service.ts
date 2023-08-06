@@ -1,36 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { Track } from '../track/entities/track.entity';
+import { Injectable } from "@nestjs/common";
+import { Track } from "../track/entities/track.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteResult, Repository } from "typeorm";
 
 @Injectable()
 export class TrackDBService {
-  private TRACKS: Track[] = [];
 
-  public findAll(): Track[] {
-    return this.TRACKS;
-  }
-  public findOne(id: string): Track {
-    return this.TRACKS.find((track) => track.id === id);
+  constructor(
+    @InjectRepository(Track)
+    private readonly trackRepository: Repository<Track>) {
   }
 
-  public find(id: string, type: keyof Track): Track | undefined {
-    return this.TRACKS.find((track) => track[type] === id);
+  public async findAll(): Promise<Track[]> {
+    return await this.trackRepository.find();
   }
 
-  public create(track: Track): Track {
-    this.TRACKS.push(track);
-    return track;
+  public async findOne(id: string): Promise<Track> {
+    return await this.trackRepository.findOneBy({ id });
   }
-  public update(track: Track): Track {
-    const UpdatedTrack: Track = this.TRACKS.find(
-      (el: Track) => el.id === track.id,
-    );
 
-    for (const updatedTrackKey in track) {
-      UpdatedTrack[updatedTrackKey] = track[updatedTrackKey];
-    }
-    return UpdatedTrack;
+  public async find(id: string, type: keyof Track): Promise<Track> {
+    const track = new Track();
+    track[type as string] = id;
+    return await this.trackRepository.findOneBy(track);
   }
-  public remove(id: string): void {
-    this.TRACKS = this.TRACKS.filter((track) => track.id !== id);
+
+  public async create(track: Track): Promise<Track> {
+    return await this.trackRepository.save(track);
+  }
+
+  public async update(track: Track): Promise<Track> {
+    return await this.create(track);
+  }
+
+  public async remove(id: string): Promise<DeleteResult> {
+    return await this.trackRepository.delete(id);
   }
 }

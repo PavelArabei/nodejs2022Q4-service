@@ -1,0 +1,5 @@
+FROM postgres:15-alpine
+
+#ENV POSTGRES_USERNAME=postgres;
+#ENV POSTGRES_PASSWORD=7788;
+#ENV POSTGRES_DB=homelibrary;

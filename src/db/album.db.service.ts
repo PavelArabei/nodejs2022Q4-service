@@ -1,34 +1,41 @@
-import { Album } from '../album/entities/album.entity';
-import { Injectable } from '@nestjs/common';
+import { Album } from "../album/entities/album.entity";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DeleteResult, Repository } from "typeorm";
 
 @Injectable()
 export class AlbumDbService {
-  private ALBUMS: Album[] = [];
 
-  public findAll(): Album[] {
-    return this.ALBUMS;
+  constructor(
+    @InjectRepository(Album)
+    private readonly albumRepository: Repository<Album>
+  ) {
   }
-  public findOne(id: string): Album {
-    return this.ALBUMS.find((album) => album.id === id);
-  }
-  public find(id: string, type: keyof Album): Album | undefined {
-    return this.ALBUMS.find((track) => track[type] === id);
-  }
-  public create(album: Album): Album {
-    this.ALBUMS.push(album);
-    return album;
-  }
-  public update(album: Album): Album {
-    const UpdatedAlbum: Album = this.ALBUMS.find(
-      (el: Album) => el.id === album.id,
-    );
 
-    for (const updatedAlbumKey in album) {
-      UpdatedAlbum[updatedAlbumKey] = album[updatedAlbumKey];
-    }
-    return UpdatedAlbum;
+
+  public async findAll(): Promise<Album[]> {
+    return await this.albumRepository.find();
   }
-  public remove(id: string): void {
-    this.ALBUMS = this.ALBUMS.filter((album) => album.id !== id);
+
+  public async findOne(id: string): Promise<Album> {
+    return await this.albumRepository.findOneBy({ id });
+  }
+
+  public async find(id: string, type: keyof Album): Promise<Album> {
+    const album = new Album();
+    album[type as string] = id;
+    return await this.albumRepository.findOneBy(album);
+  }
+
+  public async create(album: Album): Promise<Album> {
+    return await this.albumRepository.save(album);
+  }
+
+  public async update(album: Album): Promise<Album> {
+    return await this.create(album);
+  }
+
+  public async remove(id: string): Promise<DeleteResult> {
+    return await this.albumRepository.delete(id);
   }
 }

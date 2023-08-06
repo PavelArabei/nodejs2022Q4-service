@@ -1,18 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { AlbumService } from './album.service';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
-import { StatusCodes } from 'http-status-codes';
-import { IsUUIDDto } from '../dto/UUID.dto';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from "@nestjs/common";
+import { AlbumService } from "./album.service";
+import { CreateAlbumDto } from "./dto/create-album.dto";
+import { UpdateAlbumDto } from "./dto/update-album.dto";
+import { StatusCodes } from "http-status-codes";
+import { IsUUIDDto } from "../dto/UUID.dto";
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -20,11 +11,11 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { BadRequest } from '../dto/badRequest';
-import { NotFoundDto } from '../dto/notFound.dto';
-import { Album } from './entities/album.entity';
+  ApiTags
+} from "@nestjs/swagger";
+import { BadRequest } from "../dto/badRequest";
+import { NotFoundDto } from "../dto/notFound.dto";
+import { Album } from "./entities/album.entity";
 
 @ApiTags('album')
 @Controller('album')
@@ -35,8 +26,8 @@ export class AlbumController {
   @ApiBadRequestResponse({ type: BadRequest })
   @ApiCreatedResponse({ type: Album })
   @ApiBody({ type: CreateAlbumDto })
-  create(@Body() createAlbumDto: CreateAlbumDto) {
-    return this.albumService.create(createAlbumDto);
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
+    return await this.albumService.create(createAlbumDto);
   }
 
   @Get()
@@ -44,8 +35,8 @@ export class AlbumController {
     type: [Album],
     description: 'get all albums',
   })
-  findAll() {
-    return this.albumService.findAll();
+  async findAll() {
+    return await this.albumService.findAll();
   }
 
   @Get(':id')
@@ -54,8 +45,8 @@ export class AlbumController {
     description: 'get current album',
   })
   @ApiNotFoundResponse({ type: NotFoundDto })
-  findOne(@Param() { id }: IsUUIDDto) {
-    return this.albumService.findOne(id);
+  async findOne(@Param() { id }: IsUUIDDto) {
+    return await  this.albumService.findOne(id);
   }
 
   @Put(':id')
@@ -63,15 +54,15 @@ export class AlbumController {
   @ApiOkResponse({ type: Album, description: 'update album' })
   @ApiNotFoundResponse({ type: NotFoundDto })
   @ApiBody({ type: UpdateAlbumDto })
-  update(@Param() { id }: IsUUIDDto, @Body() updateAlbumDto: UpdateAlbumDto) {
-    return this.albumService.update(id, updateAlbumDto);
+  async update(@Param() { id }: IsUUIDDto, @Body() updateAlbumDto: UpdateAlbumDto) {
+    return await this.albumService.update(id, updateAlbumDto);
   }
 
   @Delete(':id')
   @ApiNoContentResponse()
   @ApiNotFoundResponse({ type: NotFoundDto })
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param() { id }: IsUUIDDto) {
-    return this.albumService.remove(id);
+  async remove(@Param() { id }: IsUUIDDto) {
+    return await this.albumService.remove(id);
   }
 }

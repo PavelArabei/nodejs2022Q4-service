@@ -8,7 +8,7 @@
 ## Choose branch
 
 ```
-git checkout part-one
+git checkout part-two
 ```
 
 ## Installing NPM modules
@@ -17,15 +17,21 @@ git checkout part-one
 npm install
 ```
 
-## Running application
+## Running Docker
+
+run docker on your computer
 
 ```
-npm start
+ docker-compose up  
 ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+if you want to download images
+
+```
+docker pull pavel7788/home-library-postgres:latest 
+
+docker pull pavel7788/home-library-app:latest
+```
 
 ## Testing
 
@@ -37,17 +43,15 @@ To run all tests without authorization
 npm run test
 ```
 
-To run only one of all test suites
+## Running application
 
 ```
-npm run test -- <path to suite>
+npm start
 ```
 
-To run all test with authorization
-
-```
-npm run test:auth
-```
+After starting the app on port (4000 as default) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ### Auto-fix and format
 
