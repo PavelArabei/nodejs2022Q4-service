@@ -15,24 +15,23 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe());
-  
+
   // app.useGlobalInterceptors(
   //   new ClassSerializerInterceptor(app.getHttpAdapter()),
   // );
   const config = new DocumentBuilder()
-    .setTitle('Doc')
-    .setVersion('1.0')
+    .setTitle("Doc")
+    .setVersion("1.0")
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup("doc", app, document);
 
   await app.listen(PORT || 4000);
   const appLink = `http://localhost:${PORT}`;
   const doc = `${appLink}/doc`;
-
   console.log(`Server start on: ${appLink}`);
   console.log(`To open Doc click here: ${doc}`);
-  const pathToDocFile = join(resolve(), 'doc', 'api.yaml');
+  const pathToDocFile = join(resolve(), "doc", "api.yaml");
   const docYaml = dump(document);
   try {
     await writeFile(pathToDocFile, docYaml);
@@ -40,4 +39,5 @@ async function bootstrap() {
     console.log(err.message);
   }
 }
+
 bootstrap();
