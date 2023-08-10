@@ -651,6 +651,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotFoundDto'
       tags: *ref_4
+  /auth/signup:
+    post:
+      operationId: AuthController_signup
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      responses:
+        '201':
+          description: ''
+  /auth/refresh:
+    post:
+      operationId: AuthController_refreshToken
+      parameters: []
+      responses:
+        '201':
+          description: ''
+  /auth/logout:
+    post:
+      operationId: AuthController_logout
+      parameters: []
+      responses:
+        '201':
+          description: ''
 info:
   title: Doc
   description: ''
@@ -972,3 +1006,15 @@ components:
         - statusCode
         - message
         - error
+    CreateUserDto:
+      type: object
+      properties:
+        login:
+          type: string
+          example: cool name
+        password:
+          type: string
+          example: cool password
+      required:
+        - login
+        - password

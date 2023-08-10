@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { v4 } from "uuid";
 import { DbService } from "../db/db.service";
-import { User } from "./entities/user.entity";
 import { ForbiddenException } from "../exceptions/forbiddenException";
+import { compare } from "bcrypt";
+
 
 @Injectable()
 export class UserService {
@@ -12,8 +12,7 @@ export class UserService {
   }
 
   async create(userDto: CreateUserDto) {
-    const user = this.newUser(userDto);
-    return this.db.user.create(user);
+    return this.db.user.create(userDto);
   }
 
   async findAll() {
@@ -28,13 +27,11 @@ export class UserService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
-
-    if (user.password !== updateUserDto.oldPassword) {
+    const isPasswordTheSame = await compare(updateUserDto.oldPassword, user.password);
+    if (!isPasswordTheSame) {
       throw new ForbiddenException("oldPassword is wrong");
     }
-
-    const newUser = this.updateUser(user, updateUserDto);
-    return this.db.user.update(newUser);
+    return this.db.user.update(user, updateUserDto);
   }
 
   async remove(id: string) {
@@ -42,28 +39,4 @@ export class UserService {
     return await this.db.user.remove(id);
   }
 
-  private newUser({ login, password }: CreateUserDto): User {
-    const id = v4();
-    const createdAt = +new Date();
-
-    const version = 1;
-    return {
-      id,
-      login,
-      password,
-      createdAt,
-      version,
-      updatedAt: createdAt
-    };
-  }
-
-  private updateUser(user: User, updateUserDto: UpdateUserDto): User {
-    const updatedAt = +new Date();
-    return {
-      ...user,
-      password: updateUserDto.newPassword,
-      version: user.version + 1,
-      updatedAt
-    };
-  }
 }

@@ -11,7 +11,7 @@ import { DbModule } from "./db/db.module";
 import { FavModule } from "./fav/fav.module";
 
 import { AppController } from "./app.controller";
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from "@app/auth/auth.module";
 
 @Module({
   imports: [
