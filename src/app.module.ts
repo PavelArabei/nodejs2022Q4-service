@@ -11,6 +11,7 @@ import { DbModule } from "./db/db.module";
 import { FavModule } from "./fav/fav.module";
 
 import { AppController } from "./app.controller";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { AppController } from "./app.controller";
     TrackModule,
     AlbumModule,
     ArtistModule,
-    FavModule
+    FavModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService]
