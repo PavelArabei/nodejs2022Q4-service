@@ -13,12 +13,8 @@ async function bootstrap() {
   dotenv.config();
   const { PORT } = process.env;
   const app = await NestFactory.create(AppModule);
-
   app.useGlobalPipes(new ValidationPipe());
 
-  // app.useGlobalInterceptors(
-  //   new ClassSerializerInterceptor(app.getHttpAdapter()),
-  // );
   const config = new DocumentBuilder()
     .setTitle("Doc")
     .setVersion("1.0")

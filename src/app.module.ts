@@ -12,6 +12,8 @@ import { FavModule } from "./fav/fav.module";
 
 import { AppController } from "./app.controller";
 import { AuthModule } from "@app/auth/auth.module";
+import { APP_GUARD } from "@nestjs/core";
+import { AtGuard } from "@app/auth/guards/at.guard";
 
 @Module({
   imports: [
@@ -25,7 +27,10 @@ import { AuthModule } from "@app/auth/auth.module";
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, {
+    provide: APP_GUARD,
+    useClass: AtGuard
+  }]
 })
 export class AppModule {
 }

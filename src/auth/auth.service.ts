@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { DbService } from "@app/db/db.service";
 import { CreateUserDto } from "@app/user/dto/create-user.dto";
 import { Tokens } from "@app/auth/types/tokens.type";
@@ -17,14 +17,15 @@ export class AuthService {
   }
 
 
-  async signup(dto: CreateUserDto): Promise<Tokens> {
-    const previousUser = await this.db.user.findOneByDto(dto);
-    if (previousUser) throw new HttpException("Username Taken", HttpStatus.CONFLICT);
+  async signup(dto: CreateUserDto) {
+    // const previousUser = await this.db.user.findOneByDto(dto);
+    //  if (previousUser) throw new HttpException("Username Taken", HttpStatus.CONFLICT);
 
     const user = await this.db.user.create(dto);
+
     const tokens = await this.getToken(user.id, user.login);
-    await this.updateRtHash(user.id, tokens.refresh_token);
-    return tokens;
+    await this.updateRtHash(user.id, tokens.refreshToken);
+    return user;
   }
 
 
@@ -36,7 +37,7 @@ export class AuthService {
     if (!isPasswordEqual) throw new ForbiddenException();
 
     const tokens = await this.getToken(user.id, user.login);
-    await this.updateRtHash(user.id, tokens.refresh_token);
+    await this.updateRtHash(user.id, tokens.refreshToken);
     return tokens;
     //
   }
@@ -51,7 +52,7 @@ export class AuthService {
     if (!isRtEqual) throw new ForbiddenException();
 
     const tokens = await this.getToken(user.id, user.login);
-    await this.updateRtHash(user.id, tokens.refresh_token);
+    await this.updateRtHash(user.id, tokens.refreshToken);
     return tokens;
   }
 
@@ -94,8 +95,8 @@ export class AuthService {
 
     ]);
     return {
-      access_token: at,
-      refresh_token: rt
+      accessToken: at,
+      refreshToken: rt
     };
 
   }
