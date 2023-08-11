@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
 import { hash } from "bcrypt";
 import * as process from "process";
@@ -34,6 +34,12 @@ export class UserWithoutPassword {
   @IsNumber()
   @IsNotEmpty()
   updatedAt: number;
+
+  @Column({ nullable: true })
+  @IsOptional()
+  @IsString()
+  hashedRt: string;
+
 }
 
 @Entity({ name: "users" })

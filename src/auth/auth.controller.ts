@@ -11,12 +11,11 @@ export class AuthController {
   @Post("signup")
   async signup(@Body() dto: CreateUserDto): Promise<Tokens> {
     return this.authService.signup(dto);
-
   }
 
   @Post("login")
-  async login() {
-    return this.authService.login();
+  async login(@Body() dto: CreateUserDto): Promise<Tokens> {
+    return this.authService.login(dto);
   }
 
   @Post("refresh")

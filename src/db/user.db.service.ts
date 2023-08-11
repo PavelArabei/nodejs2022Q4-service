@@ -19,19 +19,26 @@ export class UserDBService {
     return await this.userRepository.find();
   }
 
+  public async findOneByDto({ login }: CreateUserDto) {
+    return await this.userRepository.findOneBy({ login });
+  }
+
   public async findOne(id: string): Promise<User> {
     return await this.userRepository.findOneBy({ id });
   }
 
-  public async create(userDto: CreateUserDto): Promise<User> {
-
-    const user = this.newUser(userDto);
+  public async save(user: User): Promise<User> {
     return await this.userRepository.save(user);
+  }
+
+  public async create(userDto: CreateUserDto): Promise<User> {
+    const user = this.newUser(userDto);
+    return await this.save(user);
   }
 
   public async update(user: User, updateUserDto: UpdateUserDto): Promise<User> {
     const newUser = this.updateUser(user, updateUserDto);
-    return await this.userRepository.save(newUser);
+    return await this.save(newUser);
   }
 
   public async remove(id: string): Promise<void> {
