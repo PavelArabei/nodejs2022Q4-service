@@ -41,6 +41,7 @@ export class UserDBService {
     return await this.save(newUser);
   }
 
+
   public async remove(id: string): Promise<void> {
     await this.userRepository.delete(id);
   }

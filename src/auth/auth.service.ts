@@ -42,13 +42,24 @@ export class AuthService {
   }
 
 
-  async refreshToken() {
-    //
+  async refreshToken(userId: string, rt: string) {
+    const user = await this.db.user.findOne(userId);
+    if (!user) throw new ForbiddenException();
+    if (!user.hashedRt) throw new ForbiddenException();
+
+    const isRtEqual = await compare(rt, user.hashedRt);
+    if (!isRtEqual) throw new ForbiddenException();
+
+    const tokens = await this.getToken(user.id, user.login);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return tokens;
   }
 
 
-  async logout() {
-    //
+  async logout(userId: string) {
+    const user = await this.db.user.findOne(userId);
+    user.hashedRt = null;
+    await this.db.user.save(user);
   }
 
   async updateRtHash(userId: string, refreshToken: string) {

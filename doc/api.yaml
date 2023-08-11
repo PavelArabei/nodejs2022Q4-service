@@ -675,21 +675,21 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateUserDto'
       responses:
-        '201':
-          description: ''
-  /auth/refresh:
-    post:
-      operationId: AuthController_refreshToken
-      parameters: []
-      responses:
-        '201':
+        '200':
           description: ''
   /auth/logout:
     post:
       operationId: AuthController_logout
       parameters: []
       responses:
-        '201':
+        '200':
+          description: ''
+  /auth/refresh:
+    post:
+      operationId: AuthController_refreshToken
+      parameters: []
+      responses:
+        '200':
           description: ''
 info:
   title: Doc
