@@ -35,7 +35,6 @@ export class FavService {
   async addArtistToFavorites(id: string) {
     const artist: Artist = await this.db.artist.findOne(id);
     if (!artist) throw new UnprocessableEntity("Artist not found");
-
     await this.db.fav.addArtistToFavorites(artist);
     return createdMessage("Artist");
   }

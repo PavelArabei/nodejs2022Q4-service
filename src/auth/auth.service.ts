@@ -45,9 +45,8 @@ export class AuthService {
 
   async refreshToken(userId: string, rt: string) {
     const user = await this.db.user.findOne(userId);
-    if (!user) throw new ForbiddenException();
-    if (!user.hashedRt) throw new ForbiddenException();
-
+    if (!user || !user.hashedRt) throw new ForbiddenException();
+    
     const isRtEqual = await compare(rt, user.hashedRt);
     if (!isRtEqual) throw new ForbiddenException();
 

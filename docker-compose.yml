@@ -13,13 +13,15 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - ${PORT}:${PORT}
+    volumes:
+      - ./logs:/app/logs
+      - ./src:/app/src
     depends_on:
       - postgres
     networks:
       - my_network
     restart: always
-    volumes:
-      - app_data:/app/data
+
   
   postgres:
     build:
@@ -43,6 +45,5 @@ networks:
     driver: bridge
 
 volumes:
-  app_data:
   pg_data:
   pg_logs:
