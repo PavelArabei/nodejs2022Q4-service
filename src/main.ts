@@ -8,13 +8,19 @@ import { dump } from "js-yaml";
 
 import { join, resolve } from "path";
 import { writeFile } from "fs/promises";
+import { MyLoggingService } from "@app/logging/logging.service";
+import { catchUncaughtException } from "@app/exceptions/uncaughtException/catchUncaughtException";
+import { catchUnhandledRejection } from "@app/exceptions/uncaughtException/catchUnhandledRejection";
 
 async function bootstrap() {
   dotenv.config();
   const { PORT } = process.env;
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  const myLoggingService = app.get(MyLoggingService);
+  catchUncaughtException(myLoggingService);
+  catchUnhandledRejection(myLoggingService);
 
+  app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle("Doc")
     .setVersion("1.0")
