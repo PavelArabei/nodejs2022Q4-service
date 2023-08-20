@@ -12,21 +12,23 @@ export class MyLoggingService {
   private logFileStream: WriteStream;
   private errorFileStream: WriteStream;
   private readonly maxSize: number;
+  private readonly logLevel: number;
 
 
   constructor() {
     this.logger = new Logger();
-    const { LOG_FILE_SIZE } = process.env;
+    const { LOG_FILE_SIZE, LOG_LEVEL } = process.env;
     this.maxSize = +LOG_FILE_SIZE;
+    this.logLevel = +LOG_LEVEL;
 
     this.rotateFile(this.logFileStream, "log");
     this.rotateFile(this.errorFileStream, "err");
   }
 
   log(message: string) {
+    if (this.logLevel > 2) return;
     const color = this.getColorCode("blue");
     this.logger.log(`${color}${message}`);
-
 
     this.logFileStream.write(`${message}\n`);
     this.fileSize("log");
@@ -34,6 +36,8 @@ export class MyLoggingService {
   }
 
   error(message: string, trace?: string, context?: string) {
+    if (this.logLevel > 4) return;
+
     const color = this.getColorCode("red");
     this.logger.error(`${color}${message}`, `${color}${trace}`, context);
 
@@ -42,18 +46,24 @@ export class MyLoggingService {
   }
 
   warn(message: string, context?: string) {
+    if (this.logLevel > 3) return;
+
     this.logger.warn(message, context);
     this.logFileStream.write(`${message}\n`);
     this.fileSize("log");
   }
 
   debug(message: string, context?: string) {
+    if (this.logLevel > 1) return;
+
     this.logger.debug(message, context);
     this.logFileStream.write(`${message}\n`);
     this.fileSize("log");
   }
 
   verbose(message: string, context?: string) {
+    if (this.logLevel > 5) return;
+
     this.logger.verbose(message, context);
     this.logFileStream.write(`${message}\n`);
     this.fileSize("log");
@@ -86,7 +96,7 @@ export class MyLoggingService {
 
   private fileSize(type: LogAndError) {
     const stats = type === "log" ? statSync(this.logFileStream.path) : statSync(this.errorFileStream.path);
-    
+
     if (stats.size >= this.maxSize) {
       const stream = type === "log" ? this.logFileStream : this.errorFileStream;
       this.rotateFile(stream, type);
