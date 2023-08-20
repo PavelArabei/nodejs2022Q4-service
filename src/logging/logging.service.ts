@@ -4,6 +4,7 @@ import { createWriteStream, readdir, statSync, WriteStream } from "fs";
 import { appRoot } from "@app/main";
 import { LogAndError } from "@app/logging/types/logAndError";
 import * as process from "process";
+import { access, writeFile } from "fs/promises";
 
 
 @Injectable()
@@ -25,48 +26,48 @@ export class MyLoggingService {
     this.rotateFile(this.errorFileStream, "err");
   }
 
-  log(message: string) {
+  async log(message: string) {
     if (this.logLevel > 2) return;
     const color = this.getColorCode("blue");
     this.logger.log(`${color}${message}`);
 
     this.logFileStream.write(`${message}\n`);
-    this.fileSize("log");
+    await this.fileSize("log");
 
   }
 
-  error(message: string, trace?: string, context?: string) {
+  async error(message: string, trace?: string, context?: string) {
     if (this.logLevel > 4) return;
 
     const color = this.getColorCode("red");
     this.logger.error(`${color}${message}`, `${color}${trace}`, context);
 
     this.errorFileStream.write(`${message}\n ${trace}`);
-    this.fileSize("err");
+    await this.fileSize("err");
   }
 
-  warn(message: string, context?: string) {
+  async warn(message: string, context?: string) {
     if (this.logLevel > 3) return;
 
     this.logger.warn(message, context);
     this.logFileStream.write(`${message}\n`);
-    this.fileSize("log");
+    await this.fileSize("log");
   }
 
-  debug(message: string, context?: string) {
+  async debug(message: string, context?: string) {
     if (this.logLevel > 1) return;
 
     this.logger.debug(message, context);
     this.logFileStream.write(`${message}\n`);
-    this.fileSize("log");
+    await this.fileSize("log");
   }
 
-  verbose(message: string, context?: string) {
+  async verbose(message: string, context?: string) {
     if (this.logLevel > 5) return;
 
     this.logger.verbose(message, context);
     this.logFileStream.write(`${message}\n`);
-    this.fileSize("log");
+    await this.fileSize("log");
   }
 
   private getColorCode(color: string): string {
@@ -85,21 +86,13 @@ export class MyLoggingService {
     return join(appRoot, "..", "logs");
   }
 
-  private get logPath() {
-    return join(this.folderPath, "app.log");
-  }
 
-  private get errPath() {
-    return join(this.folderPath, "err.log");
-  }
-
-
-  private fileSize(type: LogAndError) {
+  private async fileSize(type: LogAndError) {
     const stats = type === "log" ? statSync(this.logFileStream.path) : statSync(this.errorFileStream.path);
 
     if (stats.size >= this.maxSize) {
       const stream = type === "log" ? this.logFileStream : this.errorFileStream;
-      this.rotateFile(stream, type);
+      await this.rotateFile(stream, type);
     }
   }
 
@@ -113,7 +106,6 @@ export class MyLoggingService {
           const filePath = join(this.folderPath, file);
           const stats = statSync(filePath);
           const { size } = stats;
-          console.log(this.maxSize);
           return file.startsWith(prefix) && file.endsWith(".log") && size < this.maxSize;
         });
 
@@ -121,7 +113,7 @@ export class MyLoggingService {
         else res(undefined);
       });
     });
-    console.log(filePath);
+    
     return filePath;
   }
 
@@ -137,6 +129,13 @@ export class MyLoggingService {
       const oldFileName = await this.getAvailableToWriteFile("err");
       if (oldFileName) fileName = oldFileName;
       else fileName = `${type}-${+new Date()}.log`;
+    }
+    const pathToFile = join(this.folderPath, fileName);
+
+    try {
+      await access(pathToFile);
+    } catch (err) {
+      await writeFile(pathToFile, "");
     }
 
 
