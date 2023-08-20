@@ -46,7 +46,7 @@ export class AuthService {
   async refreshToken(userId: string, rt: string) {
     const user = await this.db.user.findOne(userId);
     if (!user || !user.hashedRt) throw new ForbiddenException();
-    
+
     const isRtEqual = await compare(rt, user.hashedRt);
     if (!isRtEqual) throw new ForbiddenException();
 
@@ -75,21 +75,21 @@ export class AuthService {
   }
 
   async getToken(userId: string, login: string): Promise<Tokens> {
-    const { JWT_SECRET_KEY, JWT_SECRET_REFRESH_KEY } = process.env;
+    const { JWT_SECRET_KEY, JWT_SECRET_REFRESH_KEY, TOKEN_REFRESH_EXPIRE_TIME, TOKEN_EXPIRE_TIME } = process.env;
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync({
         sub: userId,
         login
       }, {
         secret: JWT_SECRET_KEY,
-        expiresIn: 60 * 15
+        expiresIn: +TOKEN_EXPIRE_TIME
       }),
       this.jwtService.signAsync({
         sub: userId,
         login
       }, {
         secret: JWT_SECRET_REFRESH_KEY,
-        expiresIn: 60 * 60 * 24 * 7
+        expiresIn: +TOKEN_REFRESH_EXPIRE_TIME
       })
 
     ]);
