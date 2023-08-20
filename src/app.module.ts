@@ -11,6 +11,13 @@ import { DbModule } from "./db/db.module";
 import { FavModule } from "./fav/fav.module";
 
 import { AppController } from "./app.controller";
+import { AuthModule } from "@app/auth/auth.module";
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
+import { MyLoggingService } from "@app/logging/logging.service";
+import { LoggingInterceptor } from "@app/interseptors/logging.interseptor.ts/logging.interceptor";
+import { LoggingExceptionsFilter } from "@app/logging/logging-exceptions.filter";
+import { AtGuard } from "@app/auth/guards/at.guard";
+
 
 @Module({
   imports: [
@@ -20,10 +27,27 @@ import { AppController } from "./app.controller";
     TrackModule,
     AlbumModule,
     ArtistModule,
-    FavModule
+    FavModule,
+    AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    MyLoggingService,
+    LoggingInterceptor,
+    {
+      provide: APP_FILTER,
+      useClass: LoggingExceptionsFilter
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard
+    }
+  ]
 })
 export class AppModule {
 }

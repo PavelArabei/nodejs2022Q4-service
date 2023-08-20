@@ -1,0 +1,1 @@
+export type LogAndError = "log" | "err"

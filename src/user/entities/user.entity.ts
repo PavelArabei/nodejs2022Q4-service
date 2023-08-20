@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { Column, Entity, PrimaryColumn } from "typeorm";
-
-//export type UserWithoutPassword = Omit<User, 'password'>;
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
+import { hash } from "bcrypt";
+import * as process from "process";
 
 export class UserWithoutPassword {
   @PrimaryColumn()
@@ -34,6 +34,12 @@ export class UserWithoutPassword {
   @IsNumber()
   @IsNotEmpty()
   updatedAt: number;
+
+  @Column({ nullable: true })
+  @IsOptional()
+  @IsString()
+  hashedRt: string;
+
 }
 
 @Entity({ name: "users" })
@@ -44,4 +50,11 @@ export class User extends UserWithoutPassword {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @BeforeInsert()
+  async hashPassword() {
+    const { CRYPT_SALT } = process.env;
+    this.password = await hash(this.password, +CRYPT_SALT);
+  }
+
 }

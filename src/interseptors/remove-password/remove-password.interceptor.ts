@@ -1,10 +1,11 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { map, Observable } from "rxjs";
-import { User } from "../../user/entities/user.entity";
+import { User } from "@app/user/entities/user.entity";
 
 
 const changeUserDateType = (user: User): User => {
-  return { ...user, createdAt: +user.createdAt, updatedAt: +user.updatedAt };
+  const newUser = new User();
+  return Object.assign(newUser, { ...user, createdAt: +user.createdAt, updatedAt: +user.updatedAt });
 };
 const isUser = (user) => user && typeof user === "object" && "password" in user;
 
