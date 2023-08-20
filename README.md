@@ -8,7 +8,7 @@
 ## Choose branch
 
 ```
-git checkout part-two
+git checkout part-three
 ```
 
 ## Installing NPM modules
@@ -19,18 +19,10 @@ npm install
 
 ## Running Docker
 
-run docker on your computer
+run docker on your computer then
 
 ```
  docker-compose up  
-```
-
-if you want to download images
-
-```
-docker pull pavel7788/home-library-postgres:latest 
-
-docker pull pavel7788/home-library-app:latest
 ```
 
 ## Testing
@@ -40,25 +32,26 @@ After application running open new terminal and enter:
 To run all tests without authorization
 
 ```
-npm run test
+npm run test:auth
 ```
 
-## Running application
+To watch that logs and errors writing to files open Docker Desktop => click to containers => choose my container =>
+click on three dots on home-library-app => select View files => and watch in directory app/logs/
 
-```
-npm start
-```
+To check refresh token send on postman http://127.0.0.1:4000/auth/signup and data
+{
+"login":"balbla",
+"password":"balbla"
+} to register user;
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+then send on postman http://127.0.0.1:4000/auth/login  with the same data {
+"login":"balbla",
+"password":"balbla"
+}
 
-### Auto-fix and format
+copy refreshToken
 
-```
-npm run lint
-```
+then send on postman http://127.0.0.1:4000/auth/refresh with Authorization Baerer "copied token" and this will return
+you new pair of accessToken and refreshToken
 
-```
-npm run format
-```
+to logout send on postman http://127.0.0.1:4000/auth/logout with Authorization Baerer "copied token"
